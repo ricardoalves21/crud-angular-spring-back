@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
-@Data //Esta anotação do Lombok é equivalente a getter, setter, equals e hashcode
+@Data //Esta anotação do Lombok é equivalente a getter, setter, equalsAndHashCode
 @Entity //Pertence ao pacote JPA, avisa ao spring que esta classe é uma entidade mapeada para o banco de dados
 public class Course {
 
