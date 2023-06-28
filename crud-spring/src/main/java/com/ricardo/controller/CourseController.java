@@ -3,6 +3,7 @@ package com.ricardo.controller;
 
 import com.ricardo.model.Course;
 import com.ricardo.repository.CourseRepository;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,8 +37,41 @@ public class CourseController {
     @GetMapping("/{id}")
     public ResponseEntity<Course> buscarCurso(@PathVariable Long id) {
         return courseRepository.findById(id)
-                .map(registro -> ResponseEntity.ok().body(registro))
+                .map(registroEncontrado -> ResponseEntity.ok().body(registroEncontrado))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Course> atualizaCurso(@Valid @PathVariable Long id, @RequestBody Course course) {
+
+        return courseRepository.findById(id)
+                .map(registroEncontrado -> {
+                    registroEncontrado.setName(course.getName());
+                    registroEncontrado.setCategory(course.getCategory());
+                    Course update = courseRepository.save(registroEncontrado);
+                    return ResponseEntity.ok().body(update);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> removeCurso(@PathVariable Long id) {
+
+        if(!courseRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        courseRepository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
+
+//        return courseRepository.findById(id)
+//                .map(registroEncontrado -> {
+//                    courseRepository.deleteById(id);
+//                    return ResponseEntity.noContent().<Void>build();
+//                })
+//                .orElse(ResponseEntity.notFound().build());
+
     }
 
 }
