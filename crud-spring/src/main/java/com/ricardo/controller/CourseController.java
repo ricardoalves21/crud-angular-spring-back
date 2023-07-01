@@ -4,14 +4,17 @@ package com.ricardo.controller;
 import com.ricardo.model.Course;
 import com.ricardo.repository.CourseRepository;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Validated
 @RestController //Esta anotação aviso ao spring que esta classe possui um endpoint (url que acessa uma API)
 @RequestMapping("/api/courses") //Este é o endpoint que estará exposto na API
 @AllArgsConstructor //Esta anotação informa ao spring que a injeção de dependências está sendo feita via construtor, isso é boa prática. Isso dispensa a anotação '@Autowired'
@@ -30,19 +33,20 @@ public class CourseController {
     //Anotação para o método POST
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Course create(@RequestBody Course course) {
+    public Course create(@RequestBody @Valid Course course) {
         return courseRepository.save(course);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> buscarCurso(@PathVariable Long id) {
+    public ResponseEntity<Course> buscarCurso(@PathVariable @NotNull @Positive Long id) {
         return courseRepository.findById(id)
                 .map(registroEncontrado -> ResponseEntity.ok().body(registroEncontrado))
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Course> atualizaCurso(@Valid @PathVariable Long id, @RequestBody Course course) {
+    public ResponseEntity<Course> atualizaCurso(@Valid @PathVariable @NotNull @Positive Long id,
+                                                @RequestBody @Valid Course course) {
 
         return courseRepository.findById(id)
                 .map(registroEncontrado -> {
@@ -55,7 +59,7 @@ public class CourseController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeCurso(@PathVariable Long id) {
+    public ResponseEntity<Void> removeCurso(@PathVariable @NotNull @Positive Long id) {
 
         if(!courseRepository.existsById(id)) {
             return ResponseEntity.notFound().build();
@@ -64,13 +68,6 @@ public class CourseController {
         courseRepository.deleteById(id);
 
         return ResponseEntity.noContent().build();
-
-//        return courseRepository.findById(id)
-//                .map(registroEncontrado -> {
-//                    courseRepository.deleteById(id);
-//                    return ResponseEntity.noContent().<Void>build();
-//                })
-//                .orElse(ResponseEntity.notFound().build());
 
     }
 

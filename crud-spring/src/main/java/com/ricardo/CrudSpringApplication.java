@@ -14,7 +14,7 @@ public class CrudSpringApplication {
 		SpringApplication.run(CrudSpringApplication.class, args);
 	}
 
-	//A anotação 'Bean' diz pro spring gerenciar todo o ciclo de vida deste fluxo
+	//A anotação 'Bean' diz pro spring gerenciar o ciclo de vida deste fluxo
 	//Este comando 'CommandLineRunner' coloca este comando pra ser executado assim que esta aplicação subir
 	@Bean
 	CommandLineRunner initDataBase(CourseRepository courseRepository) {
