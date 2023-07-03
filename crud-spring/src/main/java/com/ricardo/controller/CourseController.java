@@ -1,7 +1,7 @@
 package com.ricardo.controller;
 
 
-import com.ricardo.model.Course;
+import com.ricardo.dto.CourseDTO;
 import com.ricardo.service.CourseService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -26,24 +26,24 @@ public class CourseController {
     }
 
     @GetMapping
-    public List<Course> list() {
+    public List<CourseDTO> list() {
         return courseService.list();
     }
 
     @GetMapping("/{id}")
-    public Course buscarCurso(@PathVariable @NotNull @Positive Long id) {
+    public CourseDTO buscarCurso(@PathVariable @NotNull @Positive Long id) {
         return courseService.buscarCurso(id);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Course create(@RequestBody @Valid Course course) {
+    public CourseDTO create(@RequestBody @Valid @NotNull CourseDTO course) {
         return courseService.create(course);
     }
 
     @PutMapping("/{id}")
-    public Course atualizaCurso(@Valid @PathVariable @NotNull @Positive Long id,
-                                                @RequestBody @Valid Course course) {
+    public CourseDTO atualizaCurso(@PathVariable @NotNull @Positive Long id,
+                                                @RequestBody @Valid @NotNull CourseDTO course) {
         return courseService.atualizaCurso(id, course);
     }
 
