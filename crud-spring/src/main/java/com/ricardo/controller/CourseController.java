@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,10 +31,8 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> buscarCurso(@PathVariable @NotNull @Positive Long id) {
-        return courseService.buscarCurso(id)
-                .map(registroEncontrado -> ResponseEntity.ok().body(registroEncontrado))
-                .orElse(ResponseEntity.notFound().build());
+    public Course buscarCurso(@PathVariable @NotNull @Positive Long id) {
+        return courseService.buscarCurso(id);
     }
 
     @PostMapping
@@ -45,23 +42,15 @@ public class CourseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Course> atualizaCurso(@Valid @PathVariable @NotNull @Positive Long id,
+    public Course atualizaCurso(@Valid @PathVariable @NotNull @Positive Long id,
                                                 @RequestBody @Valid Course course) {
-
-        return courseService.atualizaCurso(id, course)
-                .map(registroEncontrado -> ResponseEntity.ok().body(registroEncontrado))
-                .orElse(ResponseEntity.notFound().build());
+        return courseService.atualizaCurso(id, course);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeCurso(@PathVariable @NotNull @Positive Long id) {
-
-        if(courseService.removeCurso(id)) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void removeCurso(@PathVariable @NotNull @Positive Long id) {
+        courseService.removeCurso(id);
     }
 
 }
