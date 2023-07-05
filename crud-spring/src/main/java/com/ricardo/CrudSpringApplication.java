@@ -1,5 +1,6 @@
 package com.ricardo;
 
+import com.ricardo.enums.Category;
 import com.ricardo.model.Course;
 import com.ricardo.repository.CourseRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -24,7 +25,7 @@ public class CrudSpringApplication {
 
 			Course c = new Course();
 			c.setName("Spring boot com Angular");
-			c.setCategory("back-end");
+			c.setCategory(Category.BACKEND);
 
 			courseRepository.save(c);
 		};

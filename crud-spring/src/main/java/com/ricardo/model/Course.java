@@ -1,9 +1,12 @@
 package com.ricardo.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ricardo.enums.Category;
+import com.ricardo.enums.Status;
+import com.ricardo.enums.converters.CategoryConverter;
+import com.ricardo.enums.converters.StatusConverter;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -27,14 +30,12 @@ public class Course {
     private String name;
 
     @NotNull
-    @Length(max = 10)
-    @Pattern(regexp = "back-end|front-end")
     @Column(length = 10, nullable = false)
-    private String category;
+    @Convert(converter = CategoryConverter.class)
+    private Category category;
 
     @NotNull
-    @Length(max = 10)
-    @Pattern(regexp = "ativo|inativo")
     @Column(length = 10, nullable = false)
-    private String status = "ativo";
+    @Convert(converter = StatusConverter.class)
+    private Status status = Status.ATIVO;
 }
