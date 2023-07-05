@@ -12,6 +12,9 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data //Esta anotação do Lombok é equivalente a getter, setter, equalsAndHashCode
 @Entity //Pertence ao pacote JPA, avisa ao spring que esta classe é uma entidade mapeada para o banco de dados
 @SQLDelete(sql = "UPDATE Course SET status='inativo' WHERE id=?")
@@ -38,4 +41,13 @@ public class Course {
     @Column(length = 10, nullable = false)
     @Convert(converter = StatusConverter.class)
     private Status status = Status.ATIVO;
+
+    // Este atributo é para associação entre esta classe e a classe Lesson
+    // A anotação 'cascade' serve para que qualquer alteração nesta entidade Course seja passada também para as classes filhas como 'Lesson'
+    // A anotação 'orphanRemoval' remove todos os registros que ficarem orfaos nesta relação entre a classe mae e as filhas
+    // A anotação @JoinColumn faz a união entre a entidade 'Course' e a 'Lesson' definindo um nome de coluna que unirá as duas entidades.
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course") //
+    //@JoinColumn(name = "course_id")
+    private List<Lesson> lessons = new ArrayList<>();
+
 }
